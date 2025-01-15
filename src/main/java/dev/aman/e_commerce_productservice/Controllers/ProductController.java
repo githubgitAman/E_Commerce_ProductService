@@ -1,5 +1,7 @@
 package dev.aman.e_commerce_productservice.Controllers;
 
+import dev.aman.e_commerce_productservice.AuthenticationCommons.AuthenticationComm;
+import dev.aman.e_commerce_productservice.DTOs.UserDTO;
 import dev.aman.e_commerce_productservice.Exceptions.ProductNotFound;
 import dev.aman.e_commerce_productservice.Models.Product;
 import dev.aman.e_commerce_productservice.Repositories.ProductRepository;
@@ -17,17 +19,28 @@ import java.util.List;
 public class ProductController {
     private final ProductRepository productRepository;
     ProductService productService;
-    public ProductController(@Qualifier("SelfProductService") ProductService productService, ProductRepository productRepository) {
+    AuthenticationComm authenticationComm;
+    public ProductController(@Qualifier("SelfProductService") ProductService productService,
+                             ProductRepository productRepository, AuthenticationComm authenticationComm) {
         this.productService = productService;
         this.productRepository = productRepository;
+        this.authenticationComm = authenticationComm;
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Product> getProductById(@PathVariable("id") long id) throws ProductNotFound {
+    public ResponseEntity<Product> getProductById(@PathVariable("id") long id, @RequestHeader String authenticationToken) throws ProductNotFound {
+        //we are passing token in input parameter and then we will validate by calling user service
+        UserDTO userDTO = authenticationComm.validateToken(authenticationToken);
+        ResponseEntity<Product> responseEntity = null;
+        if(userDTO == null) {
+             responseEntity = new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
+             return responseEntity;
+        }
         if(id < 1 || id > 20)
             throw new ProductNotFound("Product not found");
         Product product = productService.getProductById(id);
-        return new ResponseEntity<>(product, HttpStatus.OK);
+        responseEntity = new ResponseEntity<>(product, HttpStatus.OK);
+        return responseEntity;
     }
     @GetMapping
     public List<Product> getAllProducts() throws ProductNotFound {
