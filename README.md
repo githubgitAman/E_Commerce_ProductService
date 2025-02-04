@@ -48,3 +48,19 @@ Tech Stack Used
 	•	Cron (for scheduling tasks)
 	•	WebHooks (for event-driven integration)
 
+
+Links To Other Repositories
+
+User Service : https://github.com/githubgitAman/E_Commerce_UserService.git 
+
+Email Service : https://github.com/githubgitAman/E_Commerce_EmailService.git
+
+Payment Service : https://github.com/githubgitAman/E_Commerce_PaymentService.git
+
+Order Service : https://github.com/githubgitAman/E_Commerce_OrderService.git
+
+Cart Service : https://github.com/githubgitAman/E_Commerce_CartService.git
+
+Serivce Discovery : https://github.com/githubgitAman/E_Commerce_ServiceDiscovery.git 
+
+
